@@ -119,6 +119,6 @@ env= Environment(
 
 
 scons_compiledb.enable(env)
-env.Program("bin/Sandbox",src)
+env.Program("bin/Editor",src)
 env.CompileDb()
 

@@ -212,39 +212,16 @@ public:
   MainScene() {
     srand(ImGui::GetTime());
     world = make_Ref<b2World>(b2Vec2(0, -100));
-    texture.loadFromFile("res/tree.png");
-    atl.loadTexFromFile("res/texture.png");
-    atl.loadRectsFromFile("res/texture.json");
-    std::cout << "\n";
 
     r = make_Ref<Rect>(sf::Vector2f{100, 100}, sf::Vector2f{100, 500},
-                       sf::Color{255, 255, 255},
-                       atl.getRect("tree.png"));
+                       sf::Color{255, 255, 255}, sf::FloatRect(1,1,1,1));
 
-    texture2 = atl.getTexture();
-    Renderer::setTexture(&texture2);
-    // Renderer::setTexture(texture);
+
+     Renderer::setTexture(nullptr);       
   }
+
   float top, left, width, height;
-  void update() override {
-
-    world->Step(1.0f / 120, 6, 2);
-    ImGui::Begin("Info");
-    auto rect = r->getRect();
-    ImGui::Text("rect.top:%f\nrect.left:%f\nrect.width:%f\nrect.height:%f\n",
-                rect.top, rect.left, rect.width, rect.height);
-    ImGui::InputFloat4("rect", &top);
-
-    if (ImGui::Button("update")) {
-      sf::FloatRect texRect(top,left,width,height);
-      r->setRect(texRect);
-    }
-    ImGui::End();
-
-    // b.setPosition({MetersToPixels(body->GetPosition().x),
-    //                Engine::getWindow().getSize().y -
-    //                    MetersToPixels(body->GetPosition().y)});
-  }
+  void update() override { world->Step(1.0f / 120, 6, 2); }
   void render() override {
 
     // sf::RenderStates states;
@@ -252,15 +229,15 @@ public:
     // Engine::getWindow().draw(arr, states);
 
     Renderer::begin();
-
     Renderer::addQuad(*r);
-    Renderer::render();
+    Renderer::end();
+    Renderer::render(Engine::getWindow());
   }
 };
 
 int main() {
 
-  Engine::init(800, 600, "Mirage Sandbox");
+  Engine::init(800, 600, "Nexus");
   Engine::addScene("main", make_Ref<MainScene>());
   Engine::mainLoop("main");
   Engine::cleanup();
